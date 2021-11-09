@@ -3,13 +3,15 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ShippingRequest;
+use App\Http\Requests\ShippingsRequest;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use DB;
 
-class Settingscontroller extends Controller
+class SettingsController extends Controller
 {
-
-    public  function editshippingmethods($type)
+    public function editShippingMethods($type)
     {
 
         //free , inner , outer for shipping methods
@@ -29,7 +31,31 @@ class Settingscontroller extends Controller
 
         return view('dashboardadmin.settings.shippings.edit', compact('shippingMethod'));
 
+    }
 
+
+    public function updateShippingMethods(ShippingRequest $request, $id)
+    {
+
+        //validation
+
+        //update db
+
+        try {
+            $shipping_method = Setting::find($id);
+
+            DB::beginTransaction();
+            $shipping_method->update(['plain_value' => $request->plain_value]);
+            //save translations
+            $shipping_method->value = $request->value;
+            $shipping_method->save();
+
+            DB::commit();
+            return redirect()->back()->with(['success' => 'تم التحديث بنجاح']);
+        } catch (\Exception $ex) {
+            return redirect()->back()->with(['error' => 'هناك خطا ما يرجي المحاولة فيما بعد']);
+            DB::rollback();
+        }
 
     }
 }

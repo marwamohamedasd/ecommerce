@@ -31,11 +31,13 @@ Route::group([
         Route::get('/', [\App\Http\Controllers\Dashboard\DashboardController::class, 'index'])->name('admin.dashboard');
 
 
-        Route::group(['prefix' => 'settings', 'middleware' => 'can:settings'], function () {
+        Route::group(['prefix' => 'settings'], function () {
             Route::get('shipping-methods/{type}', [\App\Http\Controllers\Dashboard\Settingscontroller::class, 'editshippingmethods'])
                 ->name('edit.shippings.methods');
-            Route::put('shipping-methods/{id}', [\App\Http\Controllers\Dashboard\Settingscontroller::class, 'updateShippingMethods'])
+
+            Route::post('shipping-methods/{id}',[\App\Http\Controllers\Dashboard\Settingscontroller::class,'updateShippingMethods'])
                 ->name('update.shippings.methods');
+
         });
 
 
