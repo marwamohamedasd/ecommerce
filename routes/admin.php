@@ -30,7 +30,7 @@ Route::group([
 
         Route::get('/', [\App\Http\Controllers\Dashboard\DashboardController::class, 'index'])->name('admin.dashboard');
 
-
+        Route::get('logout', [\App\Http\Controllers\Dashboard\loginController::class,'logout'])->name('admin.logout');
         Route::group(['prefix' => 'settings'], function () {
             Route::get('shipping-methods/{type}', [\App\Http\Controllers\Dashboard\Settingscontroller::class, 'editshippingmethods'])
                 ->name('edit.shippings.methods');
@@ -40,6 +40,11 @@ Route::group([
 
         });
 
+        Route::group(['prefix'=>'profile'],function (){
+
+            Route::get('edit', 'ProfileController@editProfile')->name('edit.profile');
+            Route::put('update', 'ProfileController@updateprofile')->name('update.profile');
+        });
 
     });
 
